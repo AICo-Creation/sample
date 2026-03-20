@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformation 5 ONE ON ONE Days チャレンジ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400;600&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF6A;
+    --gold-light: #F0D490;
+    --gold-dark: #9A7A3A;
+    --deep: #04060F;
+    --deep2: #080D1E;
+    --cosmos: #0B1230;
+    --violet: #2A1460;
+    --magenta: #8B2060;
+    --magenta-glow: #C0306A;
+    --teal-glow: #1A6080;
+    --text: #EEE8DA;
+    --text-dim: #A09070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    overflow-x: hidden;
+    line-height: 1.9;
+  }
+
+  /* ── STARS CANVAS ── */
+  #stars-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .55;
+  }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, #1a0a3a 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 70% 70%, #0a2040 0%, transparent 60%);
+  }
+
+  .badge-days {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--gold);
+    border-radius: 40px;
+    padding: 6px 22px;
+    font-size: 11px;
+    letter-spacing: .25em;
+    color: var(--gold);
+    margin-bottom: 36px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .hero-script {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(28px, 6vw, 56px);
+    color: var(--gold-light);
+    letter-spacing: .02em;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    text-shadow: 0 0 60px rgba(212,175,106,.4);
+  }
+
+  .hero-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(80px, 18vw, 160px);
+    font-weight: 300;
+    line-height: .85;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--gold);
+    letter-spacing: -.03em;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    font-size: clamp(11px, 2vw, 14px);
+    letter-spacing: .3em;
+    color: var(--gold);
+    margin-bottom: 36px;
+  }
+
+  .hero-catch {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(22px, 5vw, 42px);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #F5E8C0 0%, var(--gold) 50%, #D4AF6A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(13px, 2.5vw, 16px);
+    color: #C0B0D0;
+    letter-spacing: .12em;
+    margin-bottom: 8px;
+  }
+
+  .hero-method {
+    font-size: clamp(14px, 2.8vw, 18px);
+    color: var(--text);
+    letter-spacing: .08em;
+    margin-bottom: 48px;
+  }
+
+  .hero-date {
+    border: 1px solid rgba(212,175,106,.3);
+    border-radius: 12px;
+    padding: 16px 36px;
+    background: rgba(212,175,106,.07);
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .hero-date .label { font-size: 11px; letter-spacing: .2em; color: var(--gold); }
+  .hero-date .date-num { font-size: clamp(28px, 5vw, 44px); font-weight: 300; letter-spacing: .05em; }
+
+  .cta-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 18px 52px;
+    background: linear-gradient(135deg, #C09030 0%, #F0D490 50%, #C09030 100%);
+    color: #1A1000;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    border-radius: 50px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s, box-shadow .3s;
+    box-shadow: 0 4px 40px rgba(200,160,60,.35);
+  }
+  .cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 60px rgba(200,160,60,.55);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+    margin: 0 auto;
+    opacity: .5;
+  }
+
+  /* ── GENERIC SECTION ── */
+  .section-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .sec-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: .3em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .sec-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 500;
+    line-height: 1.45;
+    margin-bottom: 36px;
+    color: var(--text);
+  }
+
+  .sec-lead {
+    font-size: 15px;
+    color: #BBA890;
+    line-height: 2;
+    margin-bottom: 28px;
+  }
+
+  /* ── FOR WHO ── */
+  .for-who {
+    background: radial-gradient(ellipse 100% 80% at 50% 50%, #100830 0%, transparent 70%);
+  }
+
+  .check-list { list-style: none; }
+  .check-list li {
+    padding: 14px 0 14px 40px;
+    border-bottom: 1px solid rgba(212,175,106,.12);
+    position: relative;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .check-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,106,.25) 0%, transparent 70%);
+  }
+  .check-list li::after {
+    content: '✦';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--gold);
+  }
+
+  /* ── CONCEPT ── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 36px;
+  }
+
+  .concept-card {
+    border: 1px solid rgba(212,175,106,.2);
+    border-radius: 16px;
+    padding: 28px 22px;
+    background: rgba(212,175,106,.04);
+    text-align: center;
+    transition: border-color .3s, background .3s;
+  }
+  .concept-card:hover {
+    border-color: rgba(212,175,106,.5);
+    background: rgba(212,175,106,.08);
+  }
+
+  .concept-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .concept-card h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    letter-spacing: .08em;
+  }
+  .concept-card p {
+    font-size: 13px;
+    color: #9090A0;
+    line-height: 1.8;
+  }
+
+  /* ── DAYS TIMELINE ── */
+  .timeline { position: relative; margin-top: 48px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dark), transparent);
+    opacity: .4;
+  }
+
+  .day-item {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .day-num-wrap {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,106,.15) 0%, transparent 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .day-num-wrap .d-label { font-size: 8px; letter-spacing: .15em; color: var(--gold); line-height: 1; }
+  .day-num-wrap .d-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .day-content { padding-top: 8px; }
+  .day-kw {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .day-kw span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: .15em;
+    margin-right: 8px;
+  }
+  .day-content p {
+    font-size: 14px;
+    color: #A09080;
+    line-height: 1.85;
+    margin-bottom: 6px;
+  }
+  .day-homework {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 5px 14px;
+    border: 1px solid rgba(212,175,106,.25);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: .05em;
+  }
+
+  /* ── VOICE / TESTIMONIAL ── */
+  .voice {
+    background: radial-gradient(ellipse 80% 60% at 30% 50%, #0D0525 0%, transparent 65%);
+  }
+
+  .testimonial-card {
+    border: 1px solid rgba(212,175,106,.2);
+    border-radius: 20px;
+    padding: 40px 36px;
+    background: rgba(10,5,25,.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    color: rgba(212,175,106,.08);
+    line-height: 1;
+  }
+
+  .t-result {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212,175,106,.1);
+    border: 1px solid var(--gold-dark);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .t-profile {
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: .1em;
+    margin-bottom: 20px;
+  }
+  .t-headline {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(15px, 3vw, 18px);
+    font-weight: 600;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 20px;
+    border-left: 2px solid var(--gold-dark);
+    padding-left: 16px;
+  }
+  .t-body { font-size: 14px; color: #9080A0; line-height: 2; }
+
+  /* ── BONUS ── */
+  .bonus-box {
+    border: 1px solid var(--gold-dark);
+    border-radius: 20px;
+    padding: 40px;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212,175,106,.07) 0%, transparent 70%);
+    text-align: center;
+    margin-top: 48px;
+  }
+  .bonus-box .b-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: .25em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 12px;
+  }
+  .bonus-box h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(16px, 3vw, 22px);
+    color: var(--gold-light);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .bonus-box p { font-size: 14px; color: #9080A0; }
+
+  /* ── RECEIVE ── */
+  .receive-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 36px;
+  }
+  .receive-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(212,175,106,.12);
+    background: rgba(212,175,106,.03);
+    transition: border-color .3s;
+  }
+  .receive-item:hover { border-color: rgba(212,175,106,.3); }
+  .r-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 14px;
+  }
+  .receive-item p { font-size: 15px; line-height: 1.8; color: var(--text); }
+
+  /* ── HOW TO APPLY ── */
+  .apply-steps { margin-top: 40px; }
+  .step {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  .step-n {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--gold);
+    background: radial-gradient(circle, rgba(212,175,106,.12) 0%, transparent 70%);
+  }
+  .step-body strong { display: block; font-size: 15px; font-weight: 600; color: var(--gold-light); margin-bottom: 4px; }
+  .step-body p { font-size: 14px; color: #9080A0; line-height: 1.8; }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    text-align: center;
+    padding: 100px 24px;
+    background: radial-gradient(ellipse 100% 70% at 50% 50%, #1A0840 0%, transparent 70%);
+  }
+  .final-cta .script {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(20px, 4vw, 36px);
+    color: var(--gold-light);
+    text-shadow: 0 0 60px rgba(212,175,106,.3);
+    margin-bottom: 16px;
+  }
+  .final-cta h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(18px, 3.5vw, 28px);
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 36px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px 24px;
+    border-top: 1px solid rgba(212,175,106,.1);
+    font-size: 12px;
+    color: #605050;
+    letter-spacing: .05em;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .9s ease, transform .9s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 600px) {
+    .section-inner { padding: 60px 18px; }
+    .testimonial-card { padding: 28px 22px; }
+    .bonus-box { padding: 28px 18px; }
+    .timeline::before { left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="badge-days fade-in">トランスフォーメーション &nbsp;✦&nbsp; ONE ON ONE Days チャレンジ</div>
+
+  <p class="hero-script fade-in">Transformation</p>
+  <span class="hero-num fade-in">5</span>
+  <p class="hero-sub fade-in">ONE ON ONE · DAYS · CHALLENGE</p>
+
+  <h1 class="hero-catch fade-in">
+    人生ごとダイエットする<br>
+    潜在意識 × 量子力学的メソッド
+  </h1>
+
+  <p class="hero-tagline fade-in">見た目も中身も変わるのは—魂が目醒めるから</p>
+  <p class="hero-method fade-in">Love, money &amp; life　To a new era</p>
+
+  <div class="hero-date fade-in">
+    <span class="label">ONLINE ZOOM</span>
+    <div class="date-num">3.15 Sun. ― 3.30 Mon.</div>
+  </div>
+
+  <a href="#apply" class="cta-btn fade-in">無料で参加申し込みをする</a>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── FOR WHO ─── -->
+<section class="for-who">
+  <div class="section-inner">
+    <span class="sec-label fade-in">こんな方へ</span>
+    <h2 class="sec-title fade-in">あなたはこんなことを<br>感じていませんか？</h2>
+    <ul class="check-list fade-in">
+      <li>なぜか満たされない感覚がずっと続いている</li>
+      <li>「我慢してここまで来た」という人生の重荷を<br>そろそろ本気で手放したい</li>
+      <li>Love（パートナー・人間関係）と Money（豊かさ）<br>両方諦めずに生きたい</li>
+      <li>本来の自分で生きる人生にシフトチェンジしたい</li>
+      <li>新時代に向けて、ビジネスを魂レベルでアップデートしたい</li>
+      <li>主婦の方から独り起業家の女性まで<br>人生のステージUPをしたい</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── CONCEPT ─── -->
+<section>
+  <div class="section-inner">
+    <span class="sec-label fade-in">Concept</span>
+    <h2 class="sec-title fade-in">体だけを変えても<br>リバウンドが待っています</h2>
+    <p class="sec-lead fade-in">
+      内側から湧き起こる変化で心身ともに変容していくから、戻ることはありません。
+      思考・感情・信念の余分なものを手放し、本来の自分に目醒める。<br>
+      それが「Transformation ダイエット」です。
+    </p>
+
+    <div class="concept-grid fade-in">
+      <div class="concept-card">
+        <span class="concept-icon">潜在意識</span>
+        <h3>思考のクリアリング</h3>
+        <p>思考ごちゃごちゃがスッキリ。新時代の断捨離ダイエット</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">量子力学</span>
+        <h3>フォトンの可能性</h3>
+        <p>愛・お金・新時代への可能性があなたの周りにすでに存在している</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">エゴはがし</span>
+        <h3>本来の自分へ</h3>
+        <p>高次元意識で心も体も新しい自分を再設計するプライベートな5日間</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── DAYS ─── -->
+<section>
+  <div class="section-inner">
+    <span class="sec-label fade-in">Program</span>
+    <h2 class="sec-title fade-in">5日間で起きること<br>—エゴはがし＆変容の流れ 1対1—</h2>
+
+    <div class="timeline">
+      <div class="day-item fade-in">
+        <div class="day-num-wrap">
+          <span class="d-label">DAY</span>
+          <span class="d-num">01</span>
+        </div>
+        <div class="day-content">
+          <p class="day-kw"><span>気づく</span></p>
+          <p>現在地を知る。自分の中に溜まっている感情・思考パターン・信念の正体を言語化します。</p>
+          <span class="day-homework">宿題：感情の現在地マップを書く</span>
+        </div>
+      </div>
+
+      <div class="day-item fade-in">
+        <div class="day-num-wrap">
+          <span class="d-label">DAY</span>
+          <span class="d-num">02</span>
+        </div>
+        <div class="day-content">
+          <p class="day-kw"><span>感じる</span></p>
+          <p>頭ではなく体で感情を受け取る練習。思感情を体験します。</p>
+          <span class="day-homework">宿題：1日3回・感情の1分間ボディチェック</span>
+        </div>
+      </div>
+
+      <div class="day-item fade-in">
+        <div class="day-num-wrap">
+          <span class="d-label">DAY</span>
+          <span class="d-num">03</span>
+        </div>
+        <div class="day-content">
+          <p class="day-kw"><span>掘り下げる</span></p>
+          <p>思い込みの根っこを照らす。繰り返すパターンの根っこにある「思い込み」の感情に光を当てます。</p>
+          <span class="day-homework">宿題：思い込みを声に出し、体の反応を感じる</span>
+        </div>
+      </div>
+
+      <div class="day-item fade-in">
+        <div class="day-num-wrap">
+          <span class="d-label">DAY</span>
+          <span class="d-num">04</span>
+        </div>
+        <div class="day-content">
+          <p class="day-kw"><span>手放す</span></p>
+          <p>エゴをはがす体験。思い込みに気づき、ただ感じ続け、エゴがはがれ落ちる瞬間を体験します。</p>
+          <span class="day-homework">宿題：5分間瞑想</span>
+        </div>
+      </div>
+
+      <div class="day-item fade-in">
+        <div class="day-num-wrap">
+          <span class="d-label">DAY</span>
+          <span class="d-num">05</span>
+        </div>
+        <div class="day-content">
+          <p class="day-kw"><span>目醒める</span></p>
+          <p>本来の声で未来を決める。未来志向が日常になる扉を開きます。</p>
+          <span class="day-homework">宿題：「やりたいかやりたくない」で選び「叶いそう」をぶっちぎった未来の自分に出会う</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── VOICE ─── -->
+<section class="voice">
+  <div class="section-inner">
+    <span class="sec-label fade-in">受講生の声</span>
+    <h2 class="sec-title fade-in">Transformation が起きた声</h2>
+
+    <div class="testimonial-card fade-in">
+      <div class="t-result">−12kg</div>
+      <p class="t-profile">48歳 女性　さやかさん</p>
+      <p class="t-headline">
+        周囲からも「色っぽくなった、別人のようだね！」と言われ、<br>
+        本人も目標を達成し断捨離を身につけて<br>
+        人生の質を高める意識へ引き上がった
+      </p>
+      <p class="t-body">
+        私はずっと嫌なことや向き合いたくない現実から逃げて、体調を崩すことで現実を避け、「仕方ない」「環境が悪い」と誰かのせいにして、自分の人生を生きることから逃げていました。<br><br>
+        Transformation ダイエットで特に衝撃だったのは、母との関係が変わったことです。「本当は愛されていた」その事実を、頭ではなく心で受け取ることができ、少しずつ本音で話せるようになり今では母娘の会話が増え人生の根幹が変わると幸福度もUP。<br><br>
+        部屋のモノと向き合うことで床が見えてきて、今思えばその体験がダイエットの目標達成にもつながっています。今後の目標は、生活できる最小限の厳選された特別なモノだけに囲まれて暮らすことです。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── RECEIVE ─── -->
+<section>
+  <div class="section-inner">
+    <span class="sec-label fade-in">この5日間で受け取れるもの</span>
+    <h2 class="sec-title fade-in">5日後、あなたに<br>何が起きているか</h2>
+
+    <div class="receive-grid fade-in">
+      <div class="receive-item">
+        <span class="r-icon">i</span>
+        <p>自分と真摯に向き合う時間が増えて充実する</p>
+      </div>
+      <div class="receive-item">
+        <span class="r-icon">ii</span>
+        <p>自分の選択に迷わなくなり思考のノイズが減り判断が瞬時にできる</p>
+      </div>
+      <div class="receive-item">
+        <span class="r-icon">iii</span>
+        <p>未来への不安がワクワクドキドキに変わる</p>
+      </div>
+      <div class="receive-item">
+        <span class="r-icon">iv</span>
+        <p>ビジネスが「やらなければならない」ものから「楽しむもの」へ変わる感覚</p>
+      </div>
+      <div class="receive-item">
+        <span class="r-icon">v</span>
+        <p>次のステージUPへの切符を手にする</p>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="bonus-box fade-in">
+      <span class="b-label">参加特典</span>
+      <h3>受講生100%変わった<br>ミラクル思考整理術教本プレゼント（PDF）</h3>
+      <p>参加条件を満たした方にメールにてお送りします。<br>教本に目を通してからZOOMにご参加ください。</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── APPLY ─── -->
+<section id="apply">
+  <div class="section-inner">
+    <span class="sec-label fade-in">申込み手順</span>
+    <h2 class="sec-title fade-in">参加するには</h2>
+
+    <div class="apply-steps">
+      <div class="step fade-in">
+        <span class="step-n">1</span>
+        <div class="step-body">
+          <strong>申し込み</strong>
+          <p>アドレス・お名前を入力してお申し込みください。</p>
+        </div>
+      </div>
+      <div class="step fade-in">
+        <span class="step-n">2</span>
+        <div class="step-body">
+          <strong>ヒアリングフォームに回答</strong>
+          <p>自動返信メールにヒアリングフォームのリンクがあります。回答をお願いします。</p>
+        </div>
+      </div>
+      <div class="step fade-in">
+        <span class="step-n">3</span>
+        <div class="step-body">
+          <strong>教本（PDF）が届く</strong>
+          <p>参加条件を満たしたら、メールにて「受講生100%変わったミラクル思考整理術教本」が添付されます。</p>
+        </div>
+      </div>
+      <div class="step fade-in">
+        <span class="step-n">4</span>
+        <div class="step-body">
+          <strong>ZOOM参加 → 日程を決める</strong>
+          <p>初日参加時に全ての日程を決めます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="final-cta">
+  <p class="script fade-in">1 on 1 の5日間チャレンジで</p>
+  <h2 class="fade-in">目覚ましい本来の自分に<br>出逢いましょう！</h2>
+  <a href="#" class="cta-btn fade-in">無料で参加申し込みをする</a>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>潜在意識系ダイエットコンサルタント　百合草 naomi</p>
+  <p style="margin-top: 6px; color: #403030;">© Transformation 5 ONE ON ONE Days Challenge</p>
+</footer>
+
+<!-- ─── STARS ─── -->
+<script>
+(function(){
+  const c = document.getElementById('stars-canvas');
+  const ctx = c.getContext('2d');
+  let W, H, stars = [], comets = [];
+
+  function resize(){
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+  }
+
+  function initStars(){
+    stars = Array.from({length: 220}, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.4 + .3,
+      a: Math.random(),
+      speed: Math.random() * .004 + .001,
+      gold: Math.random() < .15
+    }));
+  }
+
+  function spawnComet(){
+    comets.push({
+      x: Math.random() * W * .6,
+      y: Math.random() * H * .3,
+      vx: 2.5 + Math.random() * 2,
+      vy: 1 + Math.random() * 1.5,
+      len: 60 + Math.random() * 80,
+      life: 1
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+
+    stars.forEach(s => {
+      s.a += s.speed;
+      const alpha = .3 + .6 * Math.abs(Math.sin(s.a));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = s.gold
+        ? `rgba(220,180,80,${alpha})`
+        : `rgba(200,190,230,${alpha*.8})`;
+      ctx.fill();
+    });
+
+    comets = comets.filter(c2 => c2.life > 0);
+    comets.forEach(c2 => {
+      const g = ctx.createLinearGradient(
+        c2.x - c2.vx * c2.len / 3, c2.y - c2.vy * c2.len / 3,
+        c2.x, c2.y
+      );
+      g.addColorStop(0, `rgba(220,180,80,0)`);
+      g.addColorStop(1, `rgba(220,180,80,${c2.life * .7})`);
+      ctx.beginPath();
+      ctx.moveTo(c2.x - c2.vx * c2.len / 3, c2.y - c2.vy * c2.len / 3);
+      ctx.lineTo(c2.x, c2.y);
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      c2.x += c2.vx; c2.y += c2.vy; c2.life -= .018;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  initStars();
+  draw();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  setInterval(spawnComet, 3800);
+})();
+</script>
+
+<!-- ─── SCROLL FADE ─── -->
+<script>
+(function(){
+  const els = document.querySelectorAll('.fade-in');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, { threshold: .12 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+
+</body>
+</html>
